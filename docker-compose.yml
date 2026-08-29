@@ -1,0 +1,17 @@
+services:
+  pilestack:
+    build: .
+    # Or use the published image instead of building locally:
+    # image: ghcr.io/laaaaksh/pilestack:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    environment:
+      DATABASE_URL: file:/app/data/pilestack.db
+    volumes:
+      - pilestack-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  pilestack-data:
