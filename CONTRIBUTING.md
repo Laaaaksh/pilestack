@@ -9,7 +9,7 @@ stacked-PR review UI for GitHub, open source under the MIT license.
 git clone https://github.com/<your-username>/pilestack.git   # your fork, see below
 cd pilestack
 pnpm install
-cp .env.example .env.local   # SQLite by default — no other setup needed to run tests
+cp .env.example .env   # SQLite by default — no other setup needed to run tests
 pnpm db:migrate
 pnpm test
 ```
@@ -66,6 +66,11 @@ needed:
   If you touch `src/lib/restack.ts`, run this file specifically and make sure
   the force-with-lease test still fails safely — that's the property this
   project is riskiest on.
+- `tests/github-app.test.ts` — the GitHub App / installation-auth wiring
+  (`src/lib/github-app.ts`): a real RS256 app JWT signed with a generated
+  test key, exchanged for an installation token against GitHub's API with
+  `nock` intercepting the HTTP layer (not the Octokit client) — including
+  the negative case where GitHub returns an error.
 
 ## Releases
 
