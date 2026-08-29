@@ -17,7 +17,6 @@ not a reimplementation of one.
 [![Release](https://img.shields.io/github/v/release/Laaaaksh/pilestack?color=green&display_name=tag)](https://github.com/Laaaaksh/pilestack/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-20%2B-339933?logo=node.js&logoColor=white)](package.json)
-[![Docker](https://img.shields.io/badge/docker-ghcr.io%2Flaaaaksh%2Fpilestack-2496ED?logo=docker&logoColor=white)](https://github.com/Laaaaksh/pilestack/pkgs/container/pilestack)
 
 **[Install](#install) • [Usage](#usage) • [Configuration](#configuration) • [Changelog](CHANGELOG.md) • [Contributing](CONTRIBUTING.md) • [License](LICENSE)**
 
@@ -43,7 +42,7 @@ not a reimplementation of one.
 - Self-hosted: SQLite by default, one Docker container, no per-seat billing
   and no telemetry
 
-<img src="docs/assets/demo.gif" alt="Pilestack: opening a stack, posting a cross-PR comment, and previewing a restack" width="720">
+<img src="docs/assets/demo.gif" alt="Pilestack: opening a stack and previewing a restack" width="720">
 
 ## Why Pilestack
 
@@ -100,9 +99,14 @@ OAuth Apps → New OAuth App**, set the callback URL to
 ```bash
 git clone https://github.com/Laaaaksh/pilestack.git
 cd pilestack
-cp .env.example .env.local   # fill in the values from steps 1–2
+cp .env.example .env   # fill in the values from steps 1–2
 docker compose up -d
 ```
+
+This builds the image locally (`build: .` in `docker-compose.yml`) — no
+published image required. A pre-built `ghcr.io` image will be available as
+the `image:` alternative in that file once a tagged release has been cut;
+until then, use the command above as shown.
 
 **From source:**
 
@@ -110,8 +114,9 @@ docker compose up -d
 git clone https://github.com/Laaaaksh/pilestack.git
 cd pilestack
 pnpm install
-cp .env.example .env.local   # fill in the values from steps 1–2
+cp .env.example .env   # fill in the values from steps 1–2
 pnpm db:deploy
+pnpm db:generate
 pnpm build && pnpm start
 ```
 
@@ -131,6 +136,8 @@ Once running and the GitHub App is installed on a repository:
 Want to see the UI before wiring up a real GitHub App? `pnpm seed` loads a
 realistic sample stack into your local database so `pnpm dev` has something
 to show immediately.
+
+<img src="docs/assets/screenshot-stack.png" alt="Pilestack stack view: three PRs in dependency order with per-PR status and a cross-PR stack comment thread" width="720">
 
 ## Configuration
 

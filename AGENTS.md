@@ -59,6 +59,10 @@ CONTRIBUTING.md for the dev workflow.
   file and dynamically `import()` `@/lib/prisma` *after* that (see
   `tests/setup/test-db.ts`) — that module builds its client from the env var
   at import time, so a static top-level import would race the env var.
+- Local dev/install docs use a plain `.env`, not `.env.local`: the Prisma CLI
+  and `tsx` (via `pnpm seed`, which passes `--env-file=.env` explicitly) only
+  auto-load `.env`, while Next.js loads both. Keep README/CONTRIBUTING and
+  `docker-compose.yml`'s `env_file` on `.env` so all three tools agree.
 
 ## Maintaining this file
 

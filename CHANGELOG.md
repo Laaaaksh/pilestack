@@ -27,4 +27,22 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `pnpm seed` populates a realistic sample stack so the UI can be tried
   without connecting a real GitHub App first.
 
+### Fixed
+
+- The Dockerfile failed to build for everyone, unconditionally: it copied a
+  `public/` directory that didn't exist in the repo. Added an (empty)
+  `public/` so `docker compose up -d` works as documented.
+- `pnpm db:deploy`, `pnpm db:migrate`, and `pnpm seed` failed with
+  `Environment variable not found: DATABASE_URL` even after following the
+  README/CONTRIBUTING setup, because the Prisma CLI and `tsx` don't read
+  `.env.local` the way Next.js does. Install docs now point at a plain
+  `.env` file (which all three tools load), and `pnpm seed` passes
+  `--env-file=.env` explicitly.
+- `pnpm build` failed with Prisma type errors when following the README's
+  "From source" steps, because a Prisma client had never been generated.
+  Added the missing `pnpm db:generate` step.
+- Added test coverage for `src/lib/github-app.ts` (installation token /
+  Octokit App JWT wiring), the one previously-untested module in the stack;
+  this also puts the `nock` dependency to use.
+
 [Unreleased]: https://github.com/Laaaaksh/pilestack/commits/master
