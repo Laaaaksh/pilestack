@@ -27,4 +27,4 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `pnpm seed` populates a realistic sample stack so the UI can be tried
   without connecting a real GitHub App first.
 
-[Unreleased]: https://github.com/Laaaaksh/pilestack/commits/main
+[Unreleased]: https://github.com/Laaaaksh/pilestack/commits/master

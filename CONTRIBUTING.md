@@ -31,19 +31,19 @@ pnpm dev
 
 ## Contribution workflow
 
-The `main` branch is protected: every change lands through a pull request,
+The `master` branch is protected: every change lands through a pull request,
 required status checks must pass, and protection is enforced for everyone —
-including the maintainer. There are no direct pushes to `main`.
+including the maintainer. There are no direct pushes to `master`.
 
 1. Fork the repo on GitHub, then clone your fork (command above).
-2. Create a descriptively named feature branch from `main`.
+2. Create a descriptively named feature branch from `master`.
 3. Make your changes as small, focused commits, each leaving the tree
    buildable.
 4. Run `pnpm lint`, `pnpm typecheck`, and `pnpm test` — all three must pass.
 5. If your change is user-facing (a feature, fix, or behavior change), add
    one bullet under the `Unreleased` heading in [CHANGELOG.md](CHANGELOG.md).
 6. Push the branch to your fork.
-7. Open a pull request against `main` here.
+7. Open a pull request against `master` here.
 
 A PR can merge only when every required check passes (`Test`, `Lint`, and
 `Typecheck`) and all conversation threads are resolved.
@@ -78,7 +78,7 @@ Releases are cut by pushing a tag; GitHub Actions does the rest
    YYYY-MM-DD` above the (now empty) `## [Unreleased]` heading, following the
    format of the existing sections, and update the compare links at the
    bottom of the file.
-3. Land those changelog edits on `main` through a pull request, then tag and
+3. Land those changelog edits on `master` through a pull request, then tag and
    push:
 
    ```bash
