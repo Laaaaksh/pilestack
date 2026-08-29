@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="668" height="300" viewBox="0 0 668 300" shape-rendering="crispEdges" role="img" aria-label="pilestack">
+<rect width="668" height="300" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="2"/>
+<rect width="668" height="44" rx="10" fill="#161b22"/>
+<rect y="42" width="668" height="2" fill="#30363d"/>
+<circle cx="22" cy="22" r="6" fill="#ff5f57"/>
+<circle cx="46" cy="22" r="6" fill="#febc2e"/>
+<circle cx="70" cy="22" r="6" fill="#28c840"/>
+<text x="334" y="26" text-anchor="middle" font-family="menlo, monospace" font-size="13" fill="#8b949e">pilestack — acme/widgets</text>
+
+<!-- connecting spine -->
+<rect x="72" y="98" width="3" height="150" fill="#30363d"/>
+
+<!-- PR card 1 (bottom of the git stack, listed first) -->
+<rect x="48" y="98" width="26" height="26" rx="6" fill="#a371f7"/>
+<text x="61" y="115" text-anchor="middle" font-family="menlo, monospace" font-size="12" fill="#0d1117">1</text>
+<rect x="96" y="92" width="524" height="38" rx="6" fill="#161b22" stroke="#30363d"/>
+<text x="112" y="116" font-family="menlo, monospace" font-size="13" fill="#e6edf3">#42 Add token bucket rate limiter</text>
+<circle cx="588" cy="111" r="4" fill="#3fb950"/>
+<text x="600" y="115" font-family="menlo, monospace" font-size="11" fill="#3fb950">✓</text>
+
+<!-- PR card 2 -->
+<rect x="48" y="140" width="26" height="26" rx="6" fill="#a371f7"/>
+<text x="61" y="157" text-anchor="middle" font-family="menlo, monospace" font-size="12" fill="#0d1117">2</text>
+<rect x="96" y="134" width="524" height="38" rx="6" fill="#161b22" stroke="#30363d"/>
+<text x="112" y="158" font-family="menlo, monospace" font-size="13" fill="#e6edf3">#43 Wire rate limiter into the API gateway</text>
+<circle cx="588" cy="153" r="4" fill="#f85149"/>
+
+<!-- PR card 3 (top of the git stack, listed last) -->
+<rect x="48" y="182" width="26" height="26" rx="6" fill="#a371f7"/>
+<text x="61" y="199" text-anchor="middle" font-family="menlo, monospace" font-size="12" fill="#0d1117">3</text>
+<rect x="96" y="176" width="524" height="38" rx="6" fill="#161b22" stroke="#30363d"/>
+<text x="112" y="200" font-family="menlo, monospace" font-size="13" fill="#e6edf3">#44 Add rate-limit headers and docs</text>
+<circle cx="588" cy="195" r="4" fill="#d29922"/>
+
+<!-- footer strip: cross-PR comment hint -->
+<rect x="48" y="248" width="572" height="30" rx="6" fill="#161b22" stroke="#30363d"/>
+<text x="62" y="267" font-family="menlo, monospace" font-size="11" fill="#8b949e">💬 stack comment — applies to every PR above</text>
+</svg>

@@ -1,0 +1,114 @@
+// Pilestack data model.
+//
+// SQLite by default so a self-hoster needs zero extra infrastructure — the
+// whole app runs as one process against one file. Point DATABASE_URL at a
+// Postgres instance instead if you prefer (change the provider below too).
+
+generator client {
+  provider      = "prisma-client-js"
+  // "native" covers local dev; "debian-openssl-3.0.x" is what the Dockerfile's
+  // node:20-slim base needs — Prisma's query engine binary is OS/libc-specific.
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Installation {
+  id            Int          @id
+  accountLogin  String
+  accountType   String
+  createdAt     DateTime     @default(now())
+  repositories  Repository[]
+}
+
+model Repository {
+  id             Int           @id
+  installationId Int
+  installation   Installation  @relation(fields: [installationId], references: [id], onDelete: Cascade)
+  owner          String
+  name           String
+  fullName       String        @unique
+  defaultBranch  String        @default("main")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  pullRequests   PullRequest[]
+  stacks         Stack[]
+
+  @@index([installationId])
+}
+
+model PullRequest {
+  // GitHub's numeric pull request id (payload.pull_request.id), stable across renames.
+  id           Int        @id
+  repositoryId Int
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  number       Int
+  title        String
+  authorLogin  String
+  authorAvatarUrl String?
+  headRef      String
+  baseRef      String
+  // "open" | "closed" | "merged"
+  state        String
+  isDraft      Boolean    @default(false)
+  url          String
+  // "success" | "failure" | "pending" | "unknown"
+  ciStatus     String     @default("unknown")
+  // "approved" | "changes_requested" | "pending" | "none"
+  reviewStatus String     @default("none")
+  stackId      String?
+  stack        Stack?     @relation(fields: [stackId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([repositoryId, number])
+  @@index([repositoryId, headRef])
+  @@index([stackId])
+}
+
+model Stack {
+  id           String        @id @default(cuid())
+  repositoryId Int
+  repository   Repository    @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  // Stable identity: the head ref of the bottom-most PR in the chain. Recomputed
+  // (not replaced) on every webhook event, so comment history survives restacks.
+  signature    String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  pullRequests PullRequest[]
+  comments     StackComment[]
+  restackRuns  RestackRun[]
+
+  @@unique([repositoryId, signature])
+}
+
+model StackComment {
+  id              String   @id @default(cuid())
+  stackId         String
+  stack           Stack    @relation(fields: [stackId], references: [id], onDelete: Cascade)
+  authorLogin     String
+  authorAvatarUrl String?
+  body            String
+  createdAt       DateTime @default(now())
+
+  @@index([stackId])
+}
+
+model RestackRun {
+  id               String    @id @default(cuid())
+  stackId          String
+  stack            Stack     @relation(fields: [stackId], references: [id], onDelete: Cascade)
+  triggeredByLogin String
+  // "running" | "succeeded" | "conflict" | "failed"
+  status           String
+  // JSON-encoded RestackPlan (see lib/restack.ts) captured at trigger time.
+  planJson         String
+  errorMessage     String?
+  createdAt        DateTime  @default(now())
+  completedAt      DateTime?
+
+  @@index([stackId])
+}

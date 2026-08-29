@@ -1,0 +1,49 @@
+name: Bug report
+description: Report a problem with Pilestack
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Steps to reproduce the problem, and what you expected vs what actually happened.
+      placeholder: |
+        1. Open a stack view
+        2. Click '...'
+        3. See error
+    validations:
+      required: true
+  - type: input
+    id: pilestack-version
+    attributes:
+      label: Pilestack version
+      description: The release tag or commit SHA you're running.
+      placeholder: "v0.1.0, or a commit SHA"
+    validations:
+      required: true
+  - type: dropdown
+    id: deploy-method
+    attributes:
+      label: How are you running Pilestack?
+      options:
+        - Docker / docker-compose
+        - From source (pnpm)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: database
+    attributes:
+      label: Database
+      description: SQLite (default) or Postgres?
+      placeholder: "SQLite"
+    validations:
+      required: true
+  - type: textarea
+    id: server-logs
+    attributes:
+      label: Relevant server logs
+      description: Output from the Next.js server process around the time of the issue (redact any tokens/secrets).
+      render: shell
+    validations:
+      required: false
