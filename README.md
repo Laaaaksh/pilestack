@@ -2,13 +2,12 @@
 
 <img src="docs/assets/pilestack-banner.svg" alt="pilestack" width="640">
 
-**pilestack** — a shared review surface for stacked pull requests.
-
-A self-hosted GitHub App that reads your repo's open PRs, groups the ones that
-depend on each other into a stack, and gives your team one screen to review
-the whole thing — cross-PR comment threads, live CI/review status per PR, and
-a one-click restack that's just real `git rebase` with a confirmation step,
-not a reimplementation of one.
+**pilestack** — a shared review surface for stacked pull requests, the piece
+[Graphite](https://graphite.dev) charges $20–40/user/month for. A self-hosted
+GitHub App: infers stacks straight from your repo's open PRs, gives your team
+one screen to review the whole stack — cross-PR comment threads, live
+CI/review status per PR — and a one-click restack that's just real `git
+rebase` with a confirmation step, not a reimplementation of one.
 
 [![Star this repo](https://img.shields.io/github/stars/Laaaaksh/pilestack?style=for-the-badge&logo=github&label=star%20this%20repo&color=yellow)](https://github.com/Laaaaksh/pilestack/stargazers)
 [![Built for GitHub](https://img.shields.io/badge/built_for-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com)
@@ -18,9 +17,11 @@ not a reimplementation of one.
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-20%2B-339933?logo=node.js&logoColor=white)](package.json)
 
-**[Install](#install) • [Usage](#usage) • [Configuration](#configuration) • [Changelog](CHANGELOG.md) • [Contributing](CONTRIBUTING.md) • [License](LICENSE)**
+**[Install](#install) • [Usage](#usage) • [Configuration](#configuration) • [Limits](#limits) • [Changelog](CHANGELOG.md) • [Contributing](CONTRIBUTING.md) • [License](LICENSE)**
 
 **[Code of conduct](CODE_OF_CONDUCT.md) • [Contributing](CONTRIBUTING.md) • [License](LICENSE) • [Security](SECURITY.md)**
+
+<img src="docs/assets/screenshot-stack.png" alt="Pilestack stack view: three PRs in dependency order with per-PR status and a cross-PR stack comment thread" width="720">
 
 </div>
 
@@ -42,19 +43,18 @@ not a reimplementation of one.
 - Self-hosted: SQLite by default, one Docker container, no per-seat billing
   and no telemetry
 
-<img src="docs/assets/demo.gif" alt="Pilestack: opening a stack and previewing a restack" width="720">
-
 ## Why Pilestack
 
-[Graphite](https://graphite.dev) is the closest paid tool to this, at
-$20–40/user/month for the shared review surface. The open-source
-stacked-diff CLIs — `git-spice`, `git-town`, `git-branchless`, Meta's
-Sapling — are all excellent at managing the stack locally, but none of them
-give a team a shared, web-based review screen: a reviewer still clicks
-through PRs one at a time on GitHub. Pilestack is that missing screen: it
-reads the stack your existing free CLI already created (or one you built by
-hand) and adds the part CLI tooling can't provide alone — a shared place to
-see and discuss the whole stack together.
+The open-source stacked-diff CLIs — `git-spice`, `git-town`,
+`git-branchless`, Meta's Sapling — are all excellent at managing a stack
+locally, but none of them give a team a shared, web-based review screen: a
+reviewer still clicks through PRs one at a time on GitHub. Pilestack is that
+missing screen: it reads the stack your existing free CLI already created
+(or one you built by hand) and adds the part CLI tooling can't provide
+alone — a shared place to see and discuss the whole stack together. It isn't
+a full Graphite replacement — no merge queue, no AI-generated reviews, no
+enterprise SSO/audit log — see [Limits](#limits) for what that means in
+practice.
 
 ## Requirements
 
@@ -137,7 +137,7 @@ Want to see the UI before wiring up a real GitHub App? `pnpm seed` loads a
 realistic sample stack into your local database so `pnpm dev` has something
 to show immediately.
 
-<img src="docs/assets/screenshot-stack.png" alt="Pilestack stack view: three PRs in dependency order with per-PR status and a cross-PR stack comment thread" width="720">
+<img src="docs/assets/demo.gif" alt="Pilestack: opening a stack and previewing a restack" width="720">
 
 ## Configuration
 
@@ -152,6 +152,25 @@ short version:
 | `GITHUB_OAUTH_CLIENT_ID`, `GITHUB_OAUTH_CLIENT_SECRET` | The OAuth App from step 2 |
 | `AUTH_SECRET` | Session signing secret — generate with `openssl rand -base64 33` |
 | `NEXTAUTH_URL` | The public URL Pilestack is served from |
+
+## Limits
+
+- GitHub only — no GitLab, Bitbucket, or other forge.
+- No merge queue and no AI-generated review comments; use GitHub's own merge
+  queue alongside Pilestack if you need one. Restack is a real `git rebase` +
+  `--force-with-lease` — a conflict stops the whole chain for you to resolve
+  by hand, it does not auto-resolve.
+- No release has been tagged yet, so there's no pre-built `ghcr.io` image —
+  Docker Compose builds the image locally (see [Install](#install)), and the
+  Release badge above will read "no releases found" until the first tag
+  ships.
+- The webhook signature check and the multi-branch rebase engine have both
+  been independently exercised against real requests and real git
+  repositories. Full GitHub OAuth sign-in and a live webhook delivery from an
+  installed GitHub App have not been verified end-to-end — if you wire up a
+  real installation, you may be the first to hit the rough edges there.
+- `src/lib/github-app.ts` (the installation-token exchange) is covered by
+  tests against a mocked GitHub API, not a live one.
 
 ## Changelog
 
