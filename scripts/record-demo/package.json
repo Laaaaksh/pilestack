@@ -1,0 +1,17 @@
+{
+  "name": "pilestack-demo-recorder",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Dev-only Playwright recorder for Pilestack's README demo. Not a dependency of the product build — see README.md in this directory.",
+  "scripts": {
+    "login": "node --env-file=../../.env login.mjs",
+    "seed": "tsx --env-file=../../.env seed-demo.mts",
+    "record": "node --env-file=../../.env record.mjs",
+    "convert": "bash convert.sh"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "tsx": "^4.19.0"
+  }
+}

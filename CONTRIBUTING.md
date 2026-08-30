@@ -14,20 +14,31 @@ pnpm db:migrate
 pnpm test
 ```
 
-To run the app itself against seeded sample data (no GitHub App required):
+`pnpm seed` loads sample stack data into the local database with no GitHub
+App required:
 
 ```bash
 pnpm seed
 pnpm dev
 ```
 
+That only populates the database, though — every page under `/stacks` sits
+behind real GitHub sign-in (`src/lib/auth.ts` checks `session.githubAccessToken`
+and redirects to `/` otherwise), so seeing that seeded data in the browser
+still requires a real GitHub OAuth App (for sign-in) with a repo the signed-in
+user can access. Set those up first — see
+[README.md#install](README.md#install) steps 1–2 — before `pnpm dev` shows
+anything past the sign-in screen.
+
 ## Requirements
 
 - Node.js 20.9+
 - pnpm 9+
-- A GitHub App and OAuth App, only if you're exercising the real webhook and
-  sign-in flows end to end — see [README.md#install](README.md#install). Not
-  needed for `pnpm test` or browsing seeded data with `pnpm dev`.
+- `pnpm test` runs fully offline — no GitHub App or OAuth App needed.
+- A GitHub OAuth App is required for any browser session past the sign-in
+  screen, including browsing seeded data with `pnpm dev` (see above). A
+  GitHub App is required in addition for the real webhook sync and restack
+  flows — see [README.md#install](README.md#install).
 
 ## Contribution workflow
 
